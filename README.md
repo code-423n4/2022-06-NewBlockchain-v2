@@ -46,7 +46,7 @@ Under "SPONSORS ADD INFO HERE" heading below, include the following:
 ---
 
 # New Blockchain v2 contest details
-- $25,000 USDC main award pot
+- $23,750 USDC main award pot
 - $1,250 USDC gas optimization award pot
 - Join [C4 Discord](https://discord.gg/code4rena) to register
 - Submit findings [using the C4 form](https://code4rena.com/contests/2022-06-NewBlockchain-v2-contest/submit)
