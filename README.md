@@ -53,18 +53,9 @@ Under "SPONSORS ADD INFO HERE" heading below, include the following:
 - [Read our guidelines for more details](https://docs.code4rena.com/roles/wardens)
 - Starts June 28, 2022 20:00 UTC
 - Ends July 01, 2022 20:00 UTC
+- ⚡Ethereum and ⚛Cosmos Leagues
 
 This repo will be made public before the start of the contest. (C4 delete this line when made public)
-
-# New Blockchain contest details
-- $47,500 USDC + $47,500 protocol tokens main award pot
-- $2,500 USDC + $2,500 protocol tokens gas optimization award pot
-- Join [C4 Discord](https://discord.gg/code4rena) to register
-- Submit findings [using the C4 form](https://code4rena.com/contests/2022-06-new-blockchain-contest/submit)
-- [Read our guidelines for more details](https://docs.code4rena.com/roles/wardens)
-- Starts June 14, 2022 20:00 UTC
-- Ends June 21, 2022 19:59 UTC
-- ⚡Ethereum and ⚛Cosmos Leagues
 
 # New Blockchain (Manifest)
 ### A new EVM enabled Cosmos SDK layer 1
