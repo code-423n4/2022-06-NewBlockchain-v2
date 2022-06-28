@@ -65,7 +65,7 @@ Manifest:
 
 Not in Scope: 
 
-- Rest of the smart contracts in Compound including Comptroller, cToken etc.
+- Rest of the smart contracts in Lending Market including Comptroller, Unitroller etc.
 
 ## Project overview
 
