@@ -45,7 +45,7 @@ Under "SPONSORS ADD INFO HERE" heading below, include the following:
 
 ---
 # Cloning submodules
-- 'git --recurse-submodules "https://github.com/code-423n4/2022-06-NewBlockchain-v2.git"
+- `git --recurse-submodules "https://github.com/code-423n4/2022-06-NewBlockchain-v2.git"`
 
 # New Blockchain v2 contest details
 - $23,750 USDC main award pot
