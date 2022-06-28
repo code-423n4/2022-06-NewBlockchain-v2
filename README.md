@@ -8,8 +8,6 @@
 - Ends July 01, 2022 20:00 UTC
 - ⚡Ethereum and ⚛Cosmos Leagues
 
-This repo will be made public before the start of the contest. (C4 delete this line when made public)
-
 # Cloning submodules
 - `git --recurse-submodules "https://github.com/code-423n4/2022-06-NewBlockchain-v2.git"`
 
