@@ -9,7 +9,7 @@
 - ⚡Ethereum and ⚛Cosmos Leagues
 
 # Cloning submodules
-- `git --recurse-submodules "https://github.com/code-423n4/2022-06-NewBlockchain-v2.git"`
+- `git clone --recurse-submodules "https://github.com/code-423n4/2022-06-NewBlockchain-v2.git"`
 
 # New Blockchain (Manifest)
 ### A new EVM enabled Cosmos SDK layer 1
