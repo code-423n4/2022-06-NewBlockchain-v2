@@ -52,10 +52,12 @@ Lending Market/Stable Coin:
 - cNote contract
 - note interest rate model
 - Reservoir contract from Compound
+- CToken contract
 
 Stableswap (contained in the lending-market repo): 
 
 - All contracts including BaseV1-Core and BaseV1-Periphery
+- with focus on oracle code in BaseV1Pair
 
 Manifest:
 
