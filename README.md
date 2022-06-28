@@ -61,11 +61,11 @@ This repo will be made public before the start of the contest. (C4 delete this l
 ### A new EVM enabled Cosmos SDK layer 1
 
 # Table of Contents
-1. [Contest Scope](https://github.com/code-423n4/2022-06-newblockchain/blob/main/README.md#contest-scope)
-2. [Project Overview](https://github.com/code-423n4/2022-06-newblockchain/blob/main/README.md#project-overview)
-3. [Cosmos SDK Blockchain](https://github.com/code-423n4/2022-06-newblockchain/blob/main/README.md#cosmos-sdk-blockchain)
-4. [Smart Contracts](https://github.com/code-423n4/2022-06-newblockchain/blob/main/README.md#smart-contracts)
-5. [Areas of Specific Concern](https://github.com/code-423n4/2022-06-newblockchain/blob/main/README.md#areas-of-specific-concern)
+1. [Contest Scope](https://github.com/code-423n4/2022-06-NewBlockchain-v2/blob/main/README.md#contest-scope)
+2. [Project Overview](https://github.com/code-423n4/2022-06-NewBlockchain-v2/blob/main/README.md#project-overview)
+3. [Cosmos SDK Blockchain](https://github.com/code-423n4/2022-06-NewBlockchain-v2/blob/main/README.md#cosmos-sdk-blockchain)
+4. [Smart Contracts](https://github.com/code-423n4/2022-06-NewBlockchain-v2/blob/main/README.md#smart-contracts)
+5. [Areas of Specific Concern](https://github.com/code-423n4/2022-06-NewBlockchain-v2/blob/main/README.md#areas-of-specific-concern)
 
 | Glossary |  |
 | --- | --- |
@@ -78,14 +78,37 @@ This repo will be made public before the start of the contest. (C4 delete this l
 | UniGov(Unified Governance)  | Cosmos SDK module which updates Proposal Map Contract when governance proposals for dApps pass on Cosmos Governance Module  |
 | Dripper/Reservoir | Mechanism to meter rewards for suppliers and borrowers of the Lending Market  |
 | Proposal Map Contract  | Storage contract with function to query proposal data by ID  |
-| ZeroSwap | Zero fee Dex without governance forked from Sushiswap/Solidly  |
+| Stableswap | Zero fee Dex without governance forked from Solidly  |
 | cToken  | Lending Market for tokens forked from Compound  |
 | LP (token) | Token that represent share in Liquidity Pool |
 | Lending Market  | Compound fork without Compound Token and modified governance, |
 
 # Contest Scope
 
-This contest includes code for 3 separate solidity DApps as well as one Cosmos SDK blockchain. The 3 DApps are Zeroswap, Stableswap and Lending Market which are forks of Sushiswap, Solidly and Compound respectively. The blockchain is Manifest, which is an Evmos fork. 
+This contest includes code for 2 separate solidity DApps as well as one Cosmos SDK blockchain. The 2 DApps are Stableswap and Lending Market which are forks of Solidly and Compound respectively. The blockchain is Manifest, which is an Evmos fork. 
+
+### In Scope: 
+
+Lending Market/Stable Coin: 
+
+- Accountant smart contracts
+- Treasury smart contracts
+- Note smart contract
+- cNote smart contract
+- note interest rate model
+- Reservoir contract from Compound
+
+Stableswap (contained in the lending-market repo): 
+
+- All contracts including BaseV1-Core and BaseV1-Periphery
+
+Manifest:
+
+- Entirety of Blockchain Code
+
+Not in Scope: 
+
+- Rest of the smart contracts in Compound including Comptroller, cToken etc.
 
 ## Project overview
 
@@ -98,7 +121,7 @@ The aim of New Blockchain is to become the best execution layer for **original**
 
 New Blockchain’s core blockchain infrastructure is forked from EVMOS ([https://docs.evmos.org/](https://docs.evmos.org/)), including the main Ethermint and ERC-20 modules which simulate a EVM execution environment (Ethermint module) and offer native conversion between Cosmos SDK coins and ERC-20 tokens using an internal bridging mechanism (ERC-20 module). The claims module and incentives module are removed and we have added a custom Unified Governance Module that allows specific types of proposals that pass in the Governance module to be pushed to a storage contract on the EVM and read by dApps deployed on the EVM. 
 
-New Blockchain provides free liquidity to the ecosystem by removing swap fees from its native dex Zeroswap, a fork of SushiSwap without governance or a protocol token. Liquidity providers who supply their LP tokens to the lending market receive rewards in the form of wrapped-Manifest tokens. 
+New Blockchain provides free liquidity to the ecosystem by removing swap fees from its native dex Stableswap, a fork of Solidly without governance or a protocol token. Liquidity providers who supply their LP tokens to the lending market receive rewards in the form of wrapped-Manifest tokens. 
 
 The native lending market on New Blockchain is a fork of Compounds most recent codebase with the removal of Compounds native governance token Comp. Governance instead is conducted by submitting and voting on proposals through the Governance Module in the Cosmos SDK. When proposals pass, the storage smart contract on the EVM is updated with the proposal that passed. The proposal that was added can then be queued into the timelock for execution. **Instead of dripping Comp token rewards to suppliers and borrowers, we are dripping the wrapped version of New Blockchains native token which is identical to wrapped-ETH. This involves wrapping New Blockchain token sent from the Treasury using the WETH-9 smart contract and then sending these tokens to the Reservoir of Compound.** 
 
@@ -129,24 +152,24 @@ The unigov module is a wrapper around the Cosmos-sdk x/gov module. The module de
 
 Unified Governance refers to the Governance Bridge between the Cosmos SDK Governance Module and the storage contract in the EVM that is owned by the Governance Module and that receives updates when designated proposals are passed. There is only one smart contract that is used, the storage contract that receives updates: 
 
-#### proposalStore.sol (60 sloc):
+#### [proposalStore.sol](https://github.com/Plex-Engineer/manifest-v2/blob/main/contracts/Proposal-Store.sol#:~:text=contract%20ProposalStore%20%7B) (60 sloc):
 
 - stores all the proposals that are designated for the lending market and have passed in the Governance Module of the Cosmos SDK
 - Can be queried by other smart contracts by passing in a proposalID to the queryProp function
 
-## Zeroswap/Stableswap (Sushiswap/Solidly Forks):
+## Stableswap (Solidly Fork):
 
-Zeroswap and Stableswap are sushiswap and solidly forks respectively with all fee related logic removed. No other changes were made. An externally updated TWAP oracle was added to Zeroswap in uniswap/UniswapV2Oracle.sol
+Stableswap is a solidly fork with all fee related logic removed. Along with the removal of fees, some logic changes in the internally updated oracle were made as well. 
 
-#### [BaseV1Pair](https://github.com/Plex-Engineer/stableswap/blob/489d010eb99a0885139b2d5ed5a2d826838cc5f9/contracts/BaseV1-core.sol#:~:text=contract%20BaseV1Pair%20%7B) (368 sloc):
+#### [BaseV1Pair](https://github.com/Plex-Engineer/lending-market-v2/blob/main/contracts/Stableswap/BaseV1-core.sol#:~:text=contract%20BaseV1Pair%20%7B) (368 sloc):
 
 - the pair contract containing all core logic for providing liquidity for and swapping 2 token pairs
 
-#### [BaseV1Factory](https://github.com/Plex-Engineer/stableswap/blob/489d010eb99a0885139b2d5ed5a2d826838cc5f9/contracts/BaseV1-core.sol#:~:text=contract%20BaseV1Factory%20%7B) (51 sloc): 
+#### [BaseV1Factory](https://github.com/Plex-Engineer/lending-market-v2/blob/main/contracts/Stableswap/BaseV1-core.sol#:~:text=contract%20BaseV1Factory%20%7B) (51 sloc): 
 
 - the factory contract containing methods to manage and create new pairs
 
-#### [BaseV1Router](https://github.com/Plex-Engineer/stableswap/blob/489d010eb99a0885139b2d5ed5a2d826838cc5f9/contracts/BaseV1-periphery.sol#:~:text=contract%20BaseV1Router01%20%7B) (376 sloc):
+#### [BaseV1Router](https://github.com/Plex-Engineer/lending-market-v2/blob/main/contracts/Stableswap/BaseV1-periphery.sol#:~:text=contract%20BaseV1Router01%20is%20PriceOracle%20%7B) (376 sloc):
 
 - the router contract which directs calls to the correct pair contract
 
@@ -158,23 +181,23 @@ The Lending Market is a decentralized money market forked from Compound protocol
 
 - We removed the governance token as well as any functionality related to voting or proposing in Compound
 
-#### [WETH](https://github.com/Plex-Engineer/lending-market/blob/755424c1f9ab3f9f0408443e6606f94e4f08a990/contracts/WETH.sol#:~:text=contract%20WETH%20is%20EIP20Interface%20%7B) (80 sloc):
+#### [WETH.sol](https://github.com/Plex-Engineer/lending-market-v2/blob/main/contracts/WETH.sol#:~:text=contract%20WETH%20is%20EIP20Interface%20%7B) (80 sloc):
 
 - Standard Wrapped Ether contract used to wrap Manifest token in an ERC-20 format
 - Allows the Reservoir.sol contract to drip Wrapped version of Manifest token as a reward for supplying tokens to Lending Market
 
-#### [GovernorBravoDelegate](https://github.com/Plex-Engineer/lending-market/blob/755424c1f9ab3f9f0408443e6606f94e4f08a990/contracts/Governance/GovernorBravoDelegate.sol#:~:text=contract%20GovernorBravoDelegate%20is%20GovernorBravoDelegateStorageV2%2C%20GovernorBravoEvents%20%7B) (148 sloc):
+#### [GovernorBravoDelegate.sol](https://github.com/Plex-Engineer/lending-market-v2/blob/main/contracts/Governance/GovernorBravoDelegate.sol#:~:text=contract%20GovernorBravoDelegate%20is%20GovernorBravoDelegateStorageV2%2C%20GovernorBravoEvents%20%7B) (148 sloc):
 
 - Responsible for the core governance logic including retrieving proposal data and queueing proposals in the timelock
 - Original implementation allowed for the creation of proposals and also had logic related to voting. This logic has been removed
 - We have implemented an interface for our Unified Governance Smart Contract
 
-#### [Comptroller](https://github.com/Plex-Engineer/lending-market/blob/755424c1f9ab3f9f0408443e6606f94e4f08a990/contracts/Comptroller.sol#:~:text=contract%20Comptroller%20is%20ComptrollerV7Storage%2C%20ComptrollerInterface%2C%20ComptrollerErrorReporter%2C%20ExponentialNoError%20%7B) (735 sloc): 
+#### [Comptroller.sol](https://github.com/Plex-Engineer/lending-market-v2/blob/main/contracts/Comptroller.sol#:~:text=contract%20Comptroller%20is%20ComptrollerV7Storage%2C%20ComptrollerInterface%2C%20ComptrollerErrorReporter%2C%20ExponentialNoError%20%7B) (735 sloc): 
 
 - Responsible for the core business logic of the lending market
 - Identical to Compound except for a modification to the grantCompInternal() function which removes the reference to Comp() and replaces it with a reference to a generic EIP-20 Interface
 
-## Stablecoin (part of lending market):
+### Stablecoin (part of lending market):
 
 - Note is a USDC/USDT soft-pegged stablecoin that is backed by collateral lent to the native lending protocol on New Blockchain. Note is over-collateralized so for every note that is in circulation there is more than 1 USD worth of collateral held in cToken collateral by Lending Market
 - Note has an algorithmically pegged value to USD in the sense that it’s interest rate is derived from the price differential between itself and a designated proxy for USD such as USDC
@@ -192,39 +215,39 @@ The Lending Market is a decentralized money market forked from Compound protocol
 - **IMPORTANT: The internal price in the lending market used to calculate liquidity for Note is always set to 1 USD regardless of the value of Note in the Dex.**
 - Our implementation of this architecture is described below
 
-![flowchart](https://github.com/code-423n4/2022-06-newblockchain/blob/main/flowchart.png)
+![flowchart](https://github.com/code-423n4/2022-06-newblockchain-v2/blob/main/flowchart.png)
 
 ### Accountant:
 
 On genesis, type(uint).max Note is minted to the Accountant, on borrows/redeems into the cNote Lending Market, the Accountant supplies Note to the cNote contract, receiving cNote in return. On repayBorrows and mints, the Accountant redeems suppliedNote/curExRate cNOTE, and receives the Note it had previously lent to the market. The interest earned on the Note the Accountant lends to the market is swept to the treasury via an external method in Accountant.
 
-#### [AccountantDelegator](https://github.com/Plex-Engineer/lending-market/blob/755424c1f9ab3f9f0408443e6606f94e4f08a990/contracts/Accountant/AccountantDelegator.sol#:~:text=contract%20AccountantDelegator%20is%20AccountantInterface%2C%20AccountantDelegatorInterface%20%7B) (138 sloc) :
+#### [AccountantDelegator.sol](https://github.com/Plex-Engineer/lending-market-v2/blob/main/contracts/Accountant/AccountantDelegator.sol#:~:text=contract%20AccountantDelegator%20is%20AccountantInterface%2C%20AccountantDelegatorInterface%20%7B) (138 sloc) :
 - Handles and delegates calls to the current implementation of AccountantDelegate.
 
-#### [AccountantDelegate](https://github.com/Plex-Engineer/lending-market/blob/755424c1f9ab3f9f0408443e6606f94e4f08a990/contracts/Accountant/AccountantDelegate.sol#:~:text=contract%20AccountantDelegate%20is%20AccountantInterface%2C%20ExponentialNoError%2C%20TokenErrorReporter%2C%20ComptrollerErrorReporter%7B) (95 sloc):
+#### [AccountantDelegate.sol](https://github.com/Plex-Engineer/lending-market-v2/blob/main/contracts/Accountant/AccountantDelegate.sol#:~:text=contract%20AccountantDelegate%20is%20AccountantInterface%2C%20ExponentialNoError%2C%20TokenErrorReporter%2C%20ComptrollerErrorReporter%2C%20AccountantErrors%7B) (95 sloc):
 - handles the core logic of supplying/redeeming Note/cNote in the cNote lending market.
 
-#### [AccountantInterfaces](https://github.com/Plex-Engineer/lending-market/blob/755424c1f9ab3f9f0408443e6606f94e4f08a990/contracts/Accountant/AccountantInterfaces.sol#:~:text=contract%20AccountantDelegatorStorage%20%7B) (34 sloc):
+#### [AccountantInterfaces.sol](https://github.com/Plex-Engineer/lending-market-v2/blob/main/contracts/Accountant/AccountantInterfaces.sol#:~:text=contract%20AccountantDelegatorStorage%20%7B) (34 sloc):
 - Interfaces that AccountantDelegat(e/or) implement. Any future proposed implementation of AccountantDelegate should extend the base AccountantDelegate contract, and should define added functionality as an interface in this file.
 
 ### Treasury:
 
 The treasury receives the interest swept from the Accountant. In maintains a reserve of Note for community use. These funds are dispersed via UniGov Proposals.
 
-#### [TreasuryDelegator](https://github.com/Plex-Engineer/lending-market/blob/755424c1f9ab3f9f0408443e6606f94e4f08a990/contracts/Treasury/TreasuryDelegator.sol#:~:text=contract%20TreasuryDelegator%20is%20TreasuryDelegatorInterface%2C%20TreasuryInterface%7B) (131 sloc):
+#### [TreasuryDelegator.sol](https://github.com/Plex-Engineer/lending-market-v2/blob/main/contracts/Treasury/TreasuryDelegator.sol#:~:text=contract%20TreasuryDelegator%20is%20TreasuryDelegatorInterface%2C%20TreasuryInterface%7B) (131 sloc):
 - Handles and delegates calls to the current implementation of the Treasury.
 
-#### [TreasuryDelegate](https://github.com/Plex-Engineer/lending-market/blob/755424c1f9ab3f9f0408443e6606f94e4f08a990/contracts/Treasury/TreasuryDelegate.sol#:~:text=contract%20TreasuryDelegate%20is%20TreasuryInterface%20%7B)
+#### [TreasuryDelegate.sol](https://github.com/Plex-Engineer/lending-market-v2/blob/main/contracts/Treasury/TreasuryDelegate.sol#:~:text=contract%20TreasuryDelegate%20is%20TreasuryInterface%20%7B) (80 sloc):
 - Handles core logic of receiving funds from the Accountant, and sending funds via proposal request.
 
-#### [TreasuryInterfaces](https://github.com/Plex-Engineer/lending-market/blob/755424c1f9ab3f9f0408443e6606f94e4f08a990/contracts/Treasury/TreasuryInterfaces.sol#:~:text=contract%20TreasuryDelegatorStorage%20%7B) (27 sloc)
+#### [TreasuryInterfaces.sol](https://github.com/Plex-Engineer/lending-market-v2/blob/main/contracts/Treasury/TreasuryInterfaces.sol#:~:text=contract%20TreasuryStorageV1%20is%20TreasuryDelegatorStorage%20%7B) (27 sloc):
 - Interfaces that both TreasuryDelegat(e/or) implement. Any future implementations of TreasuryDelegate must extend the TreasuryDelegate contract, and should define added functionality as an interface in this file.
 
-#### [CNote](https://github.com/Plex-Engineer/lending-market/blob/755424c1f9ab3f9f0408443e6606f94e4f08a990/contracts/CNote.sol#:~:text=contract%20CNote%20is%20CErc20Delegate%20%7B) (75 sloc):
+#### [CNote.sol](https://github.com/Plex-Engineer/lending-market-v2/blob/main/contracts/CNote.sol#:~:text=contract%20CNote%20is%20CErc20Delegate%20%7B) (75 sloc):
 - CNote extends the CErc20Delegate base contract. It is the Lending Market for Note.
 - The mintFresh/redeemFresh, borrowFresh/repayBorrowFresh internal methods in CToken.sol are overridden here to implement the calls for Accountant to mint() or redeem() Note from the lending market when external users remove or deposit Note into the lending market as described above.
 
-#### [noteInterest.sol](https://github.com/Plex-Engineer/lending-market/blob/755424c1f9ab3f9f0408443e6606f94e4f08a990/contracts/NoteInterest.sol#:~:text=contract%20NoteRateModel%20is%20InterestRateModel%20%7B) (61 sloc):
+#### [NoteInterest.sol](https://github.com/Plex-Engineer/lending-market-v2/blob/main/contracts/NoteInterest.sol#:~:text=contract%20NoteRateModel%20is%20InterestRateModel%20%7B) (61 sloc):
 - Custom interest rate model which sets the Borrow Rate equal to the Supply Rate
 - Interest rate is based on the difference between a USD proxy such as USDC and Note as defined by a price oracle connected to our stableswap
 - Interest rate is defined as:
@@ -236,7 +259,7 @@ The treasury receives the interest swept from the Accountant. In maintains a res
 - Ensure that there is never any Note in the lending Market after a transaction completes
     - We cannot allow the lending Market to have any leftover Note after a transaction occurs otherwise our accounting of interest will be incorrect
 - Issues with Note interest rate due to Borrow Rate equaling Supply Rate
-- Pricing Oracle for Stableswap and Swap being TWAP oracles and having no offchain oracle to rely on
+- Pricing Oracle for Stableswap being TWAP oracles and having no offchain oracle to rely on
     - This is a big concern of ours given that the TWAP price is always lagging the true price but the shorter the TWAP the more susceptible to manipulation the price of the underlying asset is
     - Ensure that liquidations can occur effectively and that Note does not become undercollateralized
 - Unigov module works for every possible scenario and is unable to execute a proposal multiple times
