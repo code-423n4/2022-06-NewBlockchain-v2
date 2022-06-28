@@ -47,10 +47,11 @@ This contest includes code for 2 separate solidity DApps as well as one Cosmos S
 
 Lending Market/Stable Coin: 
 
-- Accountant smart contracts
-- Treasury smart contracts
-- Note smart contract
-- cNote smart contract
+- Accountant contracts
+- Treasury contracts
+- Governance contracts
+- Note contract
+- cNote contract
 - note interest rate model
 - Reservoir contract from Compound
 
