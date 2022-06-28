@@ -159,6 +159,8 @@ Unified Governance refers to the Governance Bridge between the Cosmos SDK Govern
 
 ## Stableswap (Solidly Fork):
 
+**The code for Stableswap is contained in the lending market at /contracts/Stableswap**
+
 Stableswap is a solidly fork with all fee related logic removed. Along with the removal of fees, some logic changes in the internally updated oracle were made as well. 
 
 #### [BaseV1Pair](https://github.com/Plex-Engineer/lending-market-v2/blob/main/contracts/Stableswap/BaseV1-core.sol#:~:text=contract%20BaseV1Pair%20%7B) (368 sloc):
