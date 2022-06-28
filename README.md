@@ -238,7 +238,7 @@ The treasury receives the interest swept from the Accountant. In maintains a res
 #### [TreasuryDelegate.sol](https://github.com/Plex-Engineer/lending-market-v2/blob/main/contracts/Treasury/TreasuryDelegate.sol#:~:text=contract%20TreasuryDelegate%20is%20TreasuryInterface%20%7B) (80 sloc):
 - Handles core logic of receiving funds from the Accountant, and sending funds via proposal request.
 
-#### [TreasuryInterfaces.sol](https://github.com/Plex-Engineer/lending-market-v2/blob/main/contracts/Treasury/TreasuryInterfaces.sol#:~:text=contract%20TreasuryStorageV1%20is%20TreasuryDelegatorStorage%20%7B) (27 sloc)
+#### [TreasuryInterfaces.sol](https://github.com/Plex-Engineer/lending-market-v2/blob/main/contracts/Treasury/TreasuryInterfaces.sol#:~:text=contract%20TreasuryStorageV1%20is%20TreasuryDelegatorStorage%20%7B) (27 sloc):
 - Interfaces that both TreasuryDelegat(e/or) implement. Any future implementations of TreasuryDelegate must extend the TreasuryDelegate contract, and should define added functionality as an interface in this file.
 
 #### [CNote.sol](https://github.com/Plex-Engineer/lending-market-v2/blob/main/contracts/CNote.sol#:~:text=contract%20CNote%20is%20CErc20Delegate%20%7B) (75 sloc):
