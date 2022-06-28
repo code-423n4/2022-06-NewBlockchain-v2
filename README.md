@@ -60,11 +60,11 @@ This repo will be made public before the start of the contest. (C4 delete this l
 ### A new EVM enabled Cosmos SDK layer 1
 
 # Table of Contents
-1. [Contest Scope](https://github.com/code-423n4/2022-06-newblockchain/blob/main/README.md#contest-scope)
-2. [Project Overview](https://github.com/code-423n4/2022-06-newblockchain/blob/main/README.md#project-overview)
-3. [Cosmos SDK Blockchain](https://github.com/code-423n4/2022-06-newblockchain/blob/main/README.md#cosmos-sdk-blockchain)
-4. [Smart Contracts](https://github.com/code-423n4/2022-06-newblockchain/blob/main/README.md#smart-contracts)
-5. [Areas of Specific Concern](https://github.com/code-423n4/2022-06-newblockchain/blob/main/README.md#areas-of-specific-concern)
+1. [Contest Scope](https://github.com/code-423n4/2022-06-NewBlockchain-v2/blob/add-lending/README.md#contest-scope)
+2. [Project Overview](https://github.com/code-423n4/2022-06-NewBlockchain-v2/blob/add-lending/README.md#project-overview)
+3. [Cosmos SDK Blockchain](https://github.com/code-423n4/2022-06-NewBlockchain-v2/blob/add-lending/README.md#cosmos-sdk-blockchain)
+4. [Smart Contracts](https://github.com/code-423n4/2022-06-NewBlockchain-v2/blob/add-lending/README.md#smart-contracts)
+5. [Areas of Specific Concern](https://github.com/code-423n4/2022-06-NewBlockchain-v2/blob/add-lending/README.md#areas-of-specific-concern)
 
 | Glossary |  |
 | --- | --- |
