@@ -92,6 +92,7 @@ Lending Market/Stable Coin:
 
 - Accountant smart contracts
 - Treasury smart contracts
+- Note smart contract
 - cNote smart contract
 - note interest rate model
 - Reservoir contract from Compound
